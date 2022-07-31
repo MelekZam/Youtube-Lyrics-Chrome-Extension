@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\LyricsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -23,6 +24,15 @@ Route::prefix('auth')->group(function() {
         Route::get('resend', [AuthController::class, 'resend']);
     });
 });
+
+
+Route::get('get-lyrics', [LyricsController::class, 'getLyrics']);
+Route::group(['middleware' => 'auth:sanctum'], function() {
+    Route::post('post-lyrics', [LyricsController::class, 'postLyrics']);
+})
+;
+
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
