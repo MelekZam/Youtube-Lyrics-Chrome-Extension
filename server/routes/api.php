@@ -5,17 +5,6 @@ use App\Http\Controllers\LyricsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your A...middleware) { }PI!
-|
-*/
-
 Route::prefix('auth')->group(function() {
     Route::post('signup', [AuthController::class, 'signup']);
     Route::post('login', [AuthController::class, 'login']);
@@ -27,8 +16,10 @@ Route::prefix('auth')->group(function() {
 
 
 Route::get('get-lyrics', [LyricsController::class, 'getLyrics']);
+Route::get('get-translation', [LyricsController::class, 'getTranslation']);
 Route::group(['middleware' => 'auth:sanctum'], function() {
     Route::post('post-lyrics', [LyricsController::class, 'postLyrics']);
+    Route::post('post-translation', [LyricsController::class, 'postTranslation']);
 })
 ;
 

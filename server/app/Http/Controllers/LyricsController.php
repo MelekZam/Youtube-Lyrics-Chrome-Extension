@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\GetLyricsRequest;
+use App\Http\Requests\GetTranslationRequest;
 use App\Http\Requests\PostLyricsRequest;
+use App\Http\Requests\PostTranslationRequest;
 use App\Models\Lyrics;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class LyricsController extends Controller
 {
@@ -40,5 +43,32 @@ class LyricsController extends Controller
         } catch (\Throwable $th) {
             return response()->json(['message' => 'error'], 500);
         }
+    }
+
+    public function getTranslation(GetTranslationRequest $req) {
+        $translation = DB::table('translations')
+                            ->where('id', $req->id)
+                            ->where('language', $req->language)
+                            ->first();
+        return $translation;
+    }
+
+    public function postTranslation(PostTranslationRequest $req) {
+        $user = Auth::user();
+        $update = [
+            'translation' => $req->translation,
+            'last_changed_by' => $user->username,
+            'last_changed_at' => Carbon::now()
+        ];
+        try {
+            $translation = DB::table('translations')
+                                ->updateOrInsert(
+                                    ['id' => $req->id, 'language' => $req->language],
+                                    $update,
+                                );
+        } catch (\Throwable $th) {
+            return response()->json(['message' => 'error'], 500);
+        }
+        return response()->json(['translation' => $update]);
     }
 }
