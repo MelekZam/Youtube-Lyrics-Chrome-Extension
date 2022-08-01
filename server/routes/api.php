@@ -14,14 +14,14 @@ Route::prefix('auth')->group(function() {
     });
 });
 
-
-Route::get('get-lyrics', [LyricsController::class, 'getLyrics']);
-Route::get('get-translation', [LyricsController::class, 'getTranslation']);
-Route::group(['middleware' => 'auth:sanctum'], function() {
-    Route::post('post-lyrics', [LyricsController::class, 'postLyrics']);
-    Route::post('post-translation', [LyricsController::class, 'postTranslation']);
-})
-;
+Route::group(['middleware' => 'verify_video_id'], function() {
+    Route::get('get-lyrics', [LyricsController::class, 'getLyrics'])->middleware('verify_video_id');
+    Route::get('get-translation', [LyricsController::class, 'getTranslation']);
+    Route::group(['middleware' => 'auth:sanctum'], function() {
+        Route::post('post-lyrics', [LyricsController::class, 'postLyrics']);
+        Route::post('post-translation', [LyricsController::class, 'postTranslation']);
+    });
+});
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

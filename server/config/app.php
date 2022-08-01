@@ -212,4 +212,6 @@ return [
         // 'ExampleClass' => App\Example\ExampleClass::class,
     ])->toArray(),
 
+    'youtube_key' => env('VERIFY_YOUTUBE_VIDEO_ID'),
+
 ];
